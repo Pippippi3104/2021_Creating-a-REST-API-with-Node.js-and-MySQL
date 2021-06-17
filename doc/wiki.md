@@ -1,3 +1,57 @@
+## Google Cloud Run で動く Node.js アプリケーションを開発する
+
+### ローカル開発環境で Node.js アプリケーションを作成する
+
+- init
+  - ```
+    npm init -y
+    npm i -D express
+    mkdir public
+    ```
+- public/index.html ファイル作成
+
+  - index.js
+
+    - ```
+      const express = require('express');
+      const app = express();
+
+      app.use(express.static(__dirname + '/public'));
+
+      const port = process.env.PORT || 8080;
+      app.listen(port, () => {
+        console.log(`Listening on port ${port}.`);
+      });
+
+      app.get("/hello", async (req, res) => {
+        const word = req.query.w;
+        res.send(`Hello, you entered ${word}!`);
+      });
+      ```
+
+  - public / index.html
+    - ```
+      <main>
+        <form action="hello" method="GET">
+          <label for="word">Please input a word or a phrase.</label>
+          <input type="text" name="w" id="word" autofocus />
+          <button type="submit">Submit</button>
+        </form>
+      </main>
+      ```
+
+- run
+  - ```
+    "scripts": {
+        "start": "node index.js"
+      },
+    ```
+  - ```
+    npm start
+    ```
+- Links
+  - [**dirname と**filename の使い方](https://qiita.com/mzmz__02/items/c132989cd0d0c2068832)
+
 ## Creating a REST API with Node.js and MySQL
 
 ### Credentials
