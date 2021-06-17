@@ -98,7 +98,7 @@
 ### Git からの継続的デプロイを設定する
 
 - Cloud Run のサービス詳細画面で「SET UP CONTINUOUS DEPLOYMENT」をクリック
-  - aaa
+  - aa
 
 #### [Return to Contents](#contents)
 
