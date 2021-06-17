@@ -1,7 +1,7 @@
 {
   "name": "googlecloudrun",
   "version": "1.0.0",
-  "description": "",
+  "description": "googlecloudrun",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -10,7 +10,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
     "express": "^4.17.1"
   }
 }
