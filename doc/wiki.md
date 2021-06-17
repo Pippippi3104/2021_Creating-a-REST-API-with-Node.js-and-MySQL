@@ -95,6 +95,10 @@
 - ビルドされたコンテナイメージを Cloud Run にデプロイ
   - Cloud Run」を開き、「CREATE SERVICE」をクリック
 
+### Git からの継続的デプロイを設定する
+
+- Cloud Run のサービス詳細画面で「SET UP CONTINUOUS DEPLOYMENT」をクリック
+
 #### [Return to Contents](#contents)
 
 <a id="#sec02"></a>
