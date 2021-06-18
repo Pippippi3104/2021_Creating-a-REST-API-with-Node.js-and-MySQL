@@ -105,6 +105,27 @@
       - Dockerfile の名前
         - Dockerfile
 
+### Cloud Translation API に接続する
+
+- 「APIs & Services」から Cloud Translation API を検索して有効化
+  - ```
+    npm i @google-cloud/translate
+    ```
+- IAM からアカウント作成
+  - name: words-app
+  - その後、鍵の作成とダウンロード
+- start.sh
+  - ```
+    export GOOGLE_APPLICATION_CREDENTIALS=/Users/satoshishimamurasecond/Desktop/SatoshiShimamura/60_Udemy/2021_Creating-a-REST-API-with-Node.js-and-MySQL/src/googlecloudrun/cloudrun-words-317113-03cb7288372e.json
+    npm run start
+    ```
+  - ```
+    chmod +x start.sh
+    ./start.sh
+    curl http://localhost:8080/translate/fr
+    > Bonjour
+    ```
+
 #### [Return to Contents](#contents)
 
 <a id="#sec02"></a>
