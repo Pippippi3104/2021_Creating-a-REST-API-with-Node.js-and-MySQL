@@ -126,6 +126,141 @@
     > Bonjour
     ```
 
+### Cloud SQL 上の MySQL データベースに接続する
+
+- MySQL インスタンスを作成
+  - credentials
+    - words-db
+    - 111111111!Qq
+  - MySQL のユーザを作成
+    - アプリケーションからデータベースに接続するためのユーザを作成
+      - words-user
+      - 111111111!Qq
+  - データベースを作成
+    - Character set は「utf8mb4」、Collation は「utf8mb4_bin」
+- データベースに接続
+
+  - ローカル開発環境から接続するには、[Cloud SQL Proxy](https://cloud.google.com/sql/docs/mysql/sql-proxy?hl=ja) を使用
+  - Cloud SQL Proxy のページから実行ファイルをダウンロードして任意のフォルダに保存
+
+    - ※ mac 用のファイルをダウンロード
+    - ```
+      curl -o cloud_sql_proxy https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
+      chmod +x cloud_sql_proxy
+      ```
+
+      ```
+      ./cloud_sql_proxy -instances=cloudrun-words-317113:us-central1:words-db=tcp:3306
+      ```
+
+    - 例)
+      - /foo/bar/cloud_sql_proxy -instances=[プロジェクト ID]:[リージョン]:[SQL インスタンス ID]=tcp:3306
+      - インスタンス接続 を使う
+
+- テーブルを作成
+
+  - db へ接続（GCP terminal）
+  - ```
+    gcloud sql connect words-db -u root
+    ```
+  - ```
+    use words;
+    show tables;
+
+    CREATE TABLE `words`.`words` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `ja` NVARCHAR(200) NOT NULL,
+    `en` NVARCHAR(200) NOT NULL,
+    `es` NVARCHAR(200) NOT NULL,
+    `fr` NVARCHAR(200) NOT NULL,
+    `done` TINYINT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`));
+
+    INSERT INTO `words`.`words` (`ja`, `en`, `es`, `fr`, `done`) VALUES
+    ('今日', 'today', 'hoy', "aujourd'hui", 0);
+    INSERT INTO `words`.`words` (`ja`, `en`, `es`, `fr`, `done`) VALUES
+    ('明日', 'tomorrow', 'mañana', "demain", 0);
+    INSERT INTO `words`.`words` (`ja`, `en`, `es`, `fr`, `done`) VALUES
+    ('自転車', 'bicycle', 'bicicleta', "vélo", 0);
+
+    select * from words;
+    ```
+
+- ローカルで動く Node.js アプリケーションから Cloud SQL に接続する
+
+  - ```
+    npm i mysql knex
+    ```
+  - database.js
+
+    - ```
+      const Knex = require('knex');
+      const connect = () => {
+        const config = {
+          user: process.env.DB_USER,
+          password: process.env.DB_PASS,
+          database: process.env.DB_NAME,
+          host: process.env.DB_HOST,
+          socketPath: process.env.DB_SOCKET,
+        };
+
+        return Knex({
+          client: 'mysql',
+          version: '5.7',
+          connection: config,
+        });
+      };
+      const knex = connect();
+      module.exports = knex;
+      ```
+
+  - index.js で database.js をインポートし、単語一覧を返す API エンドポイントを作成
+
+    - ```
+      ...
+      const knex = require('./database');
+      ...
+
+      // 単語一覧
+      app.get('/words', async (req, res) => {
+        const words = await knex.select('*').from('words').orderBy('id');
+        res.json({ status: 'ok', data: [...words] });
+      });
+      ```
+
+  - .env
+    - ```
+      GOOGLE_APPLICATION_CREDENTIALS=/xxx/xxxxxxxxxx.json
+      DB_USER=xxxxxx (←作成したアカウント)
+      DB_PASS=xxxxxx (←作成したアカウント)
+      DB_NAME=words (←作成したテーブル名)
+      DB_HOST=localhost
+      DB_SOCKET=
+      ```
+
+- run
+
+  - ```
+    "scripts": {
+      "dev": "node -r dotenv/config index.js",
+      "start": "node src/index.js"
+    },
+    ```
+
+  - ```
+    npm i -D dotenv
+    ./cloud_sql_proxy -instances=cloudrun-words-317113:us-central1:words-db=tcp:3306
+    npm run dev
+    ```
+  - http://localhost:8080/words
+
+- Cloud Run から Cloud SQL に接続する
+  - Cloud Run 上で「EDIT & DEPLOY NEW REVISION」をクリック
+    - DB_USER: words-user
+      DB_PASS: 111111111!Qq
+      DB_NAME: words
+      DB_SOCKET: /cloudsql/cloudrun-words-317113:us-central1:words-db
+
 #### [Return to Contents](#contents)
 
 <a id="#sec02"></a>

@@ -4,15 +4,20 @@
   "description": "googlecloudrun",
   "main": "index.js",
   "scripts": {
+    "dev": "node -r dotenv/config index.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  },
   "dependencies": {
     "@google-cloud/translate": "^6.2.2",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "knex": "^0.95.6",
+    "mysql": "^2.18.1"
   }
 }
