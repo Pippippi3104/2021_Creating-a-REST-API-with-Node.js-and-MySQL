@@ -1,0 +1,1 @@
+/Users/satoshishimamurasecond/Desktop/SatoshiShimamura/60_Udemy/2021_Creating-a-REST-API-with-Node.js-and-MySQL/src/googlecloudrun/cloud_sql_proxy -instances=cloudrun-words-317113:us-central1:words-db=tcp:3306
