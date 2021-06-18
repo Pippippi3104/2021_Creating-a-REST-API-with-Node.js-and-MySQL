@@ -254,6 +254,13 @@
     ```
   - http://localhost:8080/words
 
+- Cloud Run から Cloud SQL に接続する
+  - Cloud Run 上で「EDIT & DEPLOY NEW REVISION」をクリック
+    - DB_USER: words-user
+      DB_PASS: 111111111!Qq
+      DB_NAME: words
+      DB_SOCKET: /cloudsql/cloudrun-words-317113:us-central1:words-db
+
 #### [Return to Contents](#contents)
 
 <a id="#sec02"></a>
